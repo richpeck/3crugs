@@ -5,7 +5,7 @@ class ApplicationMailer < ActionMailer::Base
 
   # => Address
   # => http://stackoverflow.com/a/8106387/1143732
-  @@address = Mail::Address.new Rails.env.development? ? "support@pcfixes.com" : Rails.application.credentials.dig(Rails.env.to_sym, :app, :email)
+  @@address = Mail::Address.new Rails.env.production? ? Rails.application.credentials.dig(Rails.env.to_sym, :app, :email) : "support@pcfixes.com" 
   @@address.display_name      = Rails.application.credentials.dig(Rails.env.to_sym, :app, :domain)
 
   # => Default
