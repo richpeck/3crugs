@@ -35,6 +35,9 @@ if Object.const_defined?('ActiveAdmin')
     # => Params
     permit_params :email, :password, :password_confirmation, profile_attributes: [:id, :name, :role, :public, :avatar]  # => :avatar_attributes: [:id, FL::FILE, :_destroy] // This used to give us deep nested model - but can just attach the asset directly without custom table now
 
+    # => Actions
+    actions :index,:import,:delete
+
     ##################################
     ##################################
 
@@ -53,19 +56,34 @@ if Object.const_defined?('ActiveAdmin')
       actions
     end
 
-    form title: proc { |user| ['Editing', user.name].join(' ') } do |f|
-      f.inputs "Profile", for: [:profile, f.object.profile || f.object.build_profile] do |p|
-        p.input :name
-        p.input :role, include_blank: false
-        p.input :public
-        p.input :avatar, as: :file, hint: f.object.avatar.attached? ? image_tag(f.object.avatar.variant(resize: '150x150')) : content_tag(:span, "No Image Yet")
-      end
+    # =>  Form (Edit/New)
+    form title: proc { |product| ['Editing', product.product_code].join(' ') } do |f|
       f.inputs "Details" do
-        f.input :email
-        f.input :password
-        f.input :password_confirmation
+        f.input :vad_variant_code, inner_html: { placeholder: "Product Code" }
+        f.input :vad_descriptio,   inner_html: { placeholder: "Description" }
+        f.input :vad_ean_code
+        f.input :free_stock
+        f.input :on_order
+        f.input :eta
       end
       f.actions
+    end
+
+    ##################################
+    ##################################
+
+    # => Custom Action
+    # => Allows us to import/update products from the CSV
+    collection_action :import, method: :post do
+
+      # => Download CSV from Dropbox
+      # => This can be done through HTTP (no need for API)
+
+      # => Populate table with data
+      # => This should create or update present data
+
+      # => Redirect to collection path
+      redirect_to collection_path, notice: "Products imported successfully!"
     end
 
   end
