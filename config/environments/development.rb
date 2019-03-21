@@ -70,8 +70,8 @@ Rails.application.configure do
   ###################################
 
     # => Development
-    # => Rails 2.6.0.beta.1
-    Rails.application.config.hosts << "lvh.me"
+    # => Rails 2.6.0.beta3
+    config.hosts << "lvh.me"
 
   ###################################
   ###################################

@@ -73,6 +73,7 @@ gem 'jbuilder', '~> 2.0'
 ## General ##
 ## Used to provide general backend support for Rails apps ##
 gem 'bootsnap', '~> 1.3', '>= 1.3.2', require: false # => Boot caching (introduced in 5.2.x)
+gem 'bcrypt', platforms: :ruby # => Required for Windows // https://github.com/codahale/bcrypt-ruby/issues/142#issuecomment-252508115
 
 ## Active Admin ##
 ## Because of changes to Rails 6.0.0.beta3, need to keep these here for now ##

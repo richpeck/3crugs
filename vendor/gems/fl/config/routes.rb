@@ -29,16 +29,9 @@ Rails.application.routes.draw do
       # => CKEditor
       mount Ckeditor::Engine => '/ckeditor' if Object.const_defined?("Ckeditor")
 
-      # => Admin
-      if Rails.env.staging?
-        devise_for :users, ActiveAdmin::Devise.config
-        ActiveAdmin.routes(self)
-      else
-        constraints subdomain: 'admin' do
-          devise_for :users, ActiveAdmin::Devise.config
-          ActiveAdmin.routes(self)
-        end
-      end
+      # => Routes
+      devise_for :users, ActiveAdmin::Devise.config
+      ActiveAdmin.routes(self)
 
     end
 
@@ -47,7 +40,7 @@ Rails.application.routes.draw do
 
     # Index
     # => Shows index of app
-    root "admin/dashboard#index"
+    root "admin/dash#index"
 
   ########################################
   ########################################
