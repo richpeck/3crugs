@@ -22,7 +22,7 @@ gem 'puma', groups: [:development, :staging] # => Production will use phusion wi
 
 # => FL
 # => Used for framework etc
-#gem 'fl', path: 'vendor/gems/fl'
+gem 'fl', path: 'vendor/gems/fl'
 
 # => DB
 # => https://github.com/rrrene/projestimate/blob/master/Gemfile#L11
@@ -53,7 +53,7 @@ end
 ####################
 
 ## HAML & SASS ##
-gem 'sass-rails', '~> 5.0', '>= 5.0.7'
+gem 'sass-rails' # => Supercedes sass-rails // https://github.com/rails/sass-rails/pull/424
 gem 'uglifier', '~> 3.0'
 gem 'haml', '~> 5.0', '>= 5.0.3'
 
@@ -72,7 +72,11 @@ gem 'jbuilder', '~> 2.0'
 
 ## General ##
 ## Used to provide general backend support for Rails apps ##
-gem 'bootsnap', '~> 1.3', '>= 1.3.2', require: false                 # => Boot caching (introduced in 5.2.x)
+gem 'bootsnap', '~> 1.3', '>= 1.3.2', require: false # => Boot caching (introduced in 5.2.x)
+
+## Active Admin ##
+## Because of changes to Rails 6.0.0.beta3, need to keep these here for now ##
+## When Rails 6.0 is released, I'm sure we can remove them ##
 gem 'activeadmin', github: 'activeadmin/activeadmin'                 # => Master branch is Rails compatible
 gem 'inherited_resources', github: 'activeadmin/inherited_resources' # => Required for Rails 6.0.0.beta3 compatibility
 

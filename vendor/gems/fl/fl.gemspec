@@ -50,7 +50,7 @@ Gem::Specification.new do |spec|
 
     ## Prod ##
     spec.add_dependency 'rails',     '>= 5'             # => Rails
-    spec.add_dependency 'sprockets', '~> 4.0.0.beta4',  '< 4.0.0.beta5'  # => Sprockets (beta8 works in development but not heroku)
+    #spec.add_dependency 'sprockets', '~> 4.0.0.beta4',  '< 4.0.0.beta5'  # => Sprockets (beta8 works in development but not heroku)
     spec.add_dependency 'autoprefixer-rails'            # => Autoprefixer
     spec.add_dependency 'font-awesome-rails'            # => Icons
     spec.add_dependency 'activeadmin'                   # => ActiveAdmin
