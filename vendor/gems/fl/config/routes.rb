@@ -47,21 +47,7 @@ Rails.application.routes.draw do
 
     # Index
     # => Shows index of app
-    root "application#show"
-
-    ########################################
-    ########################################
-
-    # Robots.txt
-    # => https://blog.ragnarson.com/2013/11/15/hide-your-staging-environment-from-google.html
-    get "robots.txt" => "application#robots", as: :robots
-
-    ########################################
-    ########################################
-
-    # => Everything else
-    # => Nodes shown through system
-    #resources :application, only: :show, path: "" # => url.com/:id
+    root "admin/dashboard#index"
 
   ########################################
   ########################################
