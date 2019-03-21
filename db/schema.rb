@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_27_094014) do
+ActiveRecord::Schema.define(version: 2019_03_21_112427) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "resource_type"
@@ -68,6 +68,17 @@ ActiveRecord::Schema.define(version: 2018_06_27_094014) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_nodes_on_user_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "vad_variant_code"
+    t.string "vad_description"
+    t.integer "vad_ean_code"
+    t.integer "free_stock"
+    t.integer "on_order"
+    t.date "eta"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "profiles", force: :cascade do |t|
