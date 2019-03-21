@@ -9,14 +9,14 @@ en:
         icon:   '🎨'
         one:    'Asset'
         other:  'Assets'
+      product:
+        icon:   '📦'
+        one:    'Product'
+        other:  'Products'
       meta/option:
         icon:   '🔒'
         one:    'Option'
         other:  'Options'
-      meta/product:
-        icon:   '📦'
-        one:    'Product'
-        other:  'Products'
       meta/page:
         icon:   '📝'
         one:    'Page'
