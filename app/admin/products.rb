@@ -15,8 +15,9 @@
 ############################################################
 
 # => Dependencies
-require 'csv'
-require 'open-uri'
+require 'csv'       # => Read CSV
+require 'open-uri'  # => Download file
+require 'zip'       # => Unzip archive
 
 ############################################################
 ############################################################
@@ -91,6 +92,21 @@ if Object.const_defined?('ActiveAdmin')
     # => Allows us to import/update products from the CSV
     collection_action :import do
 
+      # => Vars
+      api = Meta::Option.find_by(ref: "app_ekm").val || nil
+      zip = Meta::Option.find_by(ref: "app_csv").val || nil
+
+      # => Download CSV from Dropbox
+      # => This can be done through HTTP (no need for API)
+      file = open zip
+      Zip::File.open(file) do |zipfile|
+        zipfile.each do |z|
+          puts z.to_s
+          if z.to_s == "Think Rugs Stock"
+            puts "hit"
+          end
+        end
+      end
 
       # => Populate table with data
       # => This should create or update present data
