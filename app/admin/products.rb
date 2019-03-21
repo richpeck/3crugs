@@ -26,8 +26,11 @@ if Object.const_defined?('ActiveAdmin')
     ##################################
     ##################################
 
+    # => Vars
+    @@name = ["📦", Product.model_name.human(count: 2)].join(' ')
+
     # => Menu
-    menu priority: 3, label: -> { ["📦", Product.model_name.human(count: 2)].join(' ') }
+    menu priority: 3, label: -> { @@name }
 
     # => Params
     permit_params :email, :password, :password_confirmation, profile_attributes: [:id, :name, :role, :public, :avatar]  # => :avatar_attributes: [:id, FL::FILE, :_destroy] // This used to give us deep nested model - but can just attach the asset directly without custom table now
@@ -36,24 +39,20 @@ if Object.const_defined?('ActiveAdmin')
     ##################################
 
     # => Index
-    index title: [I18n.t("activerecord.models.user.icon"), 'Users'].join(' ') do
+    # => Shows the extant products
+    index title: @@name do
       selectable_column
-      column 'Avatar' do |user|
-        user.avatar.attached? ? image_tag(user.avatar) : 'N/A'
-      end
-      column :name
-      column :email
-      column :role
-      column :public
-      column :sign_in_count
-      column :current_sign_in_at
-      column :last_sign_in_at
+      column "Product Code", :vad_variant_code
+      column "Description",  :vad_description
+      column "EAN",          :vad_ean_code
+      column "Stock",        :free_stock
+      column "On Order",     :on_order
+      column "ETA",          :eta
+      column :created_at
+      column :updated_at
       actions
     end
 
-    filter :email
-
-    #[I18n.t("activerecord.models.user.icon"), 'Users'].join(' ')
     form title: proc { |user| ['Editing', user.name].join(' ') } do |f|
       f.inputs "Profile", for: [:profile, f.object.profile || f.object.build_profile] do |p|
         p.input :name
