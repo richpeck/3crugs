@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
     # Index
     # => Shows index of app
-    root "admin/dash#index"
+    root "admin/products#index"
 
   ########################################
   ########################################

@@ -12,12 +12,8 @@
 
 ## Info ##
 models = {
-  option:       {priority: 3},
-  page:         {priority: 4},
-  platform:     {priority: 5},
-  plan:         {priority: 6},
-  performance:  {resource: 'performance'},
-  rating:       {priority: 11}
+  product:      {priority: 3},
+  option:       {priority: 4}
 }
 ############################################################
 ############################################################
@@ -42,19 +38,6 @@ if Object.const_defined?('ActiveAdmin')
 
         # => Model
         ActiveAdmin.register model, as: models.try(:[], meta.to_sym).try(:[], :resource) || meta.to_s do
-
-          ##################################
-          ##################################
-
-          # => Scopes
-          if meta.to_sym == :option
-            scope '💥 All', default: true do |option|
-              option.excluding ['feature','location', 'section']
-            end
-            scope ('👑 Features')  { |node| node.ref :feature }
-            scope ('🗺️ Locations') { |node| node.ref :location }
-            scope ('📎 Sections')   { |node| node.ref :section }
-          end
 
           ##################################
           ##################################
