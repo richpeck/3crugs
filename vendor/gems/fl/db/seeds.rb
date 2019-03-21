@@ -19,7 +19,7 @@ include ActiveRecord::Concerns::Seeds
 ##########################################
 
 # => Data
-Rails.application.credentials[Rails.env.to_sym][:seeds].each do |model, refs|
+Rails.application.credentials.dig(Rails.env.to_sym,:seeds).each do |model, refs|
   iterate model, refs
 end
 
@@ -27,7 +27,7 @@ end
 ##########################################
 
 # => Users
-User.create!(email: Rails.application.credentials[Rails.env.to_sym][:admin][:email], password: Rails.application.credentials[Rails.env.to_sym][:admin][:password], password_confirmation: Rails.application.credentials[Rails.env.to_sym][:admin][:password], profile_attributes: {role: :admin, name: 'Richard Peck'}, send_email: ENV['email'] || true) unless User.any?
+User.create!(email: Rails.application.credentials.dig(Rails.env.to_sym,:admin,:email), password: Rails.application.credentials.dig(Rails.env.to_sym,:admin,:password), password_confirmation: Rails.application.credentials.dig(Rails.env.to_sym,:admin,:password), profile_attributes: {role: :admin, name: '3CRugs'}, send_email: ENV['email'] || true) unless User.any?
 
 ##########################################
 ##########################################
