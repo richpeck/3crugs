@@ -47,7 +47,7 @@ if Object.const_defined?('ActiveAdmin')
     ##################################
 
     # => Actions
-    actions :index,:import,:delete
+    actions :index, :import, :destroy
 
     # => Action Button (top right)
     action_item "Import" do
@@ -75,8 +75,8 @@ if Object.const_defined?('ActiveAdmin')
     # =>  Form (Edit/New)
     form title: proc { |product| ['Editing', product.product_code].join(' ') } do |f|
       f.inputs "Details" do
-        f.input :vad_variant_code, inner_html: { placeholder: "Product Code" }
-        f.input :vad_descriptio,   inner_html: { placeholder: "Description" }
+        f.input :vad_variant_code,  inner_html: { placeholder: "Product Code" }
+        f.input :vad_description,   inner_html: { placeholder: "Description" }
         f.input :vad_ean_code
         f.input :free_stock
         f.input :on_order
@@ -100,9 +100,8 @@ if Object.const_defined?('ActiveAdmin')
       # => This can be done through HTTP (no need for API)
       file = open zip
       Zip::File.open(file) do |zipfile|
-        zipfile.each do |z|
-          puts z.to_s
-          if z.to_s == "Think Rugs Stock"
+        zipfile.each do |file|
+          if file.to_s.strip == "Think Rugs Stock.csv"
             puts "hit"
           end
         end
@@ -110,6 +109,11 @@ if Object.const_defined?('ActiveAdmin')
 
       # => Populate table with data
       # => This should create or update present data
+      # => https://www.rubyguides.com/2018/10/parse-csv-ruby/
+      csv = CSV.read csv_text, headers: true
+      csv.each do |row|
+        Product.find_or_create_by(vad_variant_code: row["vad_variant_code"], vad_description: row["vad_description"], vad_ean_code: row["vad_ean_code"], free_stock: row["free_stock"], on_order: row["on_order"], eta: row["on_order"])
+      end
 
       # => Redirect to collection path
       redirect_to collection_path, notice: "Products imported successfully!"

@@ -18,6 +18,7 @@ class Product < ApplicationRecord
 
   # =>  Validations
   validates :vad_variant_code, :vad_description, presence: true
+  validates :vad_variant_code, uniqueness: true
 
   # => Aliases
   alias_attribute :product_code, :vad_variant_code
