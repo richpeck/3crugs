@@ -49,20 +49,20 @@ Gem::Specification.new do |spec|
     spec.add_development_dependency 'rake',    '~> 10.0'
 
     ## Prod ##
-    spec.add_dependency 'rails',     '>= 5'             # => Rails
-    spec.add_dependency 'autoprefixer-rails'            # => Autoprefixer
-    spec.add_dependency 'font-awesome-rails'            # => Icons
-    spec.add_dependency 'activeadmin'                   # => ActiveAdmin
-    spec.add_dependency 'formadmin'                     # => FormAdmin (ActiveAdmin Skin)
+    spec.add_dependency 'rails', '>= 5'      # => Rails
+    spec.add_dependency 'autoprefixer-rails' # => Autoprefixer
+    spec.add_dependency 'font-awesome-rails' # => Icons
+    spec.add_dependency 'activeadmin'        # => ActiveAdmin
+    spec.add_dependency 'formadmin'          # => FormAdmin (ActiveAdmin Skin)
 
     ## Backend ##
-    spec.add_dependency 'bootstrap'                     # => Bootstrap (tooltips)
-    spec.add_dependency 'trix'                          # => Trix
-    spec.add_dependency 'nilify_blanks'                 # => Nilify Blanks
-    spec.add_dependency 'friendly_id'                   # => FriendlyID
-    spec.add_dependency 'devise'                        # => Devise
-    spec.add_dependency 'exception_handler'             # => ExceptionHandler
-    spec.add_dependency 'responders'                    # => Responders (used in controller)
+    spec.add_dependency 'bootstrap'          # => Bootstrap (tooltips)
+    spec.add_dependency 'trix'               # => Trix
+    spec.add_dependency 'nilify_blanks'      # => Nilify Blanks
+    spec.add_dependency 'friendly_id'        # => FriendlyID
+    spec.add_dependency 'devise'             # => Devise
+    spec.add_dependency 'exception_handler'  # => ExceptionHandler
+    spec.add_dependency 'responders'         # => Responders (used in controller)
 
   ##############################################################
   ##############################################################
