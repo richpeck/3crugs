@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
     respond_to :html
 
     # => Authentication
-    http_basic_authenticate_with name: Rails.application.class.parent.to_s.downcase, password: "Twitter234" if Rails.env.staging?
+    http_basic_authenticate_with name: Rails.application.class.parent.to_s.downcase, password: "password" if Rails.env.staging?
 
   ##################################
   ##################################
