@@ -1,0 +1,38 @@
+!!!
+%html
+  %head
+    = title yield(:title) + (" - " if content_for(:title)) + Rails.application.credentials[Rails.env.to_sym][:app][:name]
+
+    = meta :js,          :application, "https://www.googletagmanager.com/gtag/js?id=#{Rails.application.credentials[Rails.env.to_sym][:app][:analytics]}", "data-turbolinks-track" => :reload
+    = meta :stylesheet,  :application, "//fonts.googleapis.com/css?family=Montserrat|Open+Sans", media: :all, "data-turbolinks-track" => :reload
+
+    = meta :description, Rails.application.credentials[Rails.env.to_sym][:app][:description]
+    = meta :keywords,    Rails.application.credentials[Rails.env.to_sym][:app][:keywords]
+    = meta :author,      Rails.application.credentials[Rails.env.to_sym][:app][:author]
+
+    = meta :meta,       "pinterest, no pin"
+    = meta :viewport,   "width=device-width, initial-scale=1"
+
+    = meta :favicon
+    = meta :robots
+    = meta :csrf
+
+    :javascript
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '#{Rails.application.credentials[Rails.env.to_sym][:app][:analytics]}');
+
+  %body
+    - haml_tag_if content_for?(:header), "%header" do
+      = liquidize yield(:header)
+
+    %main
+      - %i(inner_header main inner_footer).each do |element|
+        - haml_tag_if content_for?(element), element.to_s.split("_").last do
+          = liquidize yield (element == :main ? nil : element)
+
+    - haml_tag_if content_for?(:footer), "%footer" do
+      = liquidize yield(:footer)
+    = content_tag :footer do
+      THIS IS A TEST FOR THE FOOTER
