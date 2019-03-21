@@ -50,24 +50,19 @@ Gem::Specification.new do |spec|
 
     ## Prod ##
     spec.add_dependency 'rails',     '>= 5'             # => Rails
-    #spec.add_dependency 'sprockets', '~> 4.0.0.beta4',  '< 4.0.0.beta5'  # => Sprockets (beta8 works in development but not heroku)
     spec.add_dependency 'autoprefixer-rails'            # => Autoprefixer
     spec.add_dependency 'font-awesome-rails'            # => Icons
     spec.add_dependency 'activeadmin'                   # => ActiveAdmin
     spec.add_dependency 'formadmin'                     # => FormAdmin (ActiveAdmin Skin)
-    spec.add_dependency 'image_processing'              # => ImageMagick support for ActiveStorage
 
     ## Backend ##
     spec.add_dependency 'bootstrap'                     # => Bootstrap (tooltips)
-    spec.add_dependency 'liquid'                        # => Liquid
     spec.add_dependency 'trix'                          # => Trix
     spec.add_dependency 'nilify_blanks'                 # => Nilify Blanks
-    spec.add_dependency 'rmagick'                       # => RMagick
     spec.add_dependency 'friendly_id'                   # => FriendlyID
     spec.add_dependency 'devise'                        # => Devise
     spec.add_dependency 'exception_handler'             # => ExceptionHandler
     spec.add_dependency 'responders'                    # => Responders (used in controller)
-    spec.add_dependency 'sitemap_generator'             # => Sitemaps
 
   ##############################################################
   ##############################################################

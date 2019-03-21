@@ -34,7 +34,7 @@ if Object.const_defined?("ActiveAdmin")
     # Set the title that is displayed on the main layout
     # for each of the active admin pages.
     #
-    config.site_title = Rails.application.credentials[Rails.env.to_sym][:app][:title]
+    config.site_title = Rails.application.credentials.dig(Rails.env.to_sym, :app, :title)
 
     # Set the link url for the title. For example, to take
     # users to your main site. Defaults to no link.
@@ -64,7 +64,7 @@ if Object.const_defined?("ActiveAdmin")
     #   config.default_namespace = false
     #
     # Default:
-    config.default_namespace = namespace # => Staging = Heroku
+    #config.default_namespace = namespace # => Staging = Heroku
     #
     # You can customize the settings for each namespace by using
     # a namespace block. For example, to change the site title
@@ -158,9 +158,9 @@ if Object.const_defined?("ActiveAdmin")
     #
     # Add tags to all pages logged in users see:
     config.meta_tags = {
-      author:      Rails.application.credentials[Rails.env.to_sym][:app][:author],
-      keywords:    Rails.application.credentials[Rails.env.to_sym][:app][:keywords],
-      description: Rails.application.credentials[Rails.env.to_sym][:app][:description]
+      author:      Rails.application.credentials.dig(Rails.env.to_sym, :app, :author),
+      keywords:    Rails.application.credentials.dig(Rails.env.to_sym, :app, :keywords),
+      description: Rails.application.credentials.dig(Rails.env.to_sym, :app, :description)
     }
 
     # By default, sign up/sign in/recover password pages are excluded
@@ -226,17 +226,6 @@ if Object.const_defined?("ActiveAdmin")
     #  end
     #end
 
-    ### Custom User Credentials (top right) ###
-    config.namespace namespace do |admin|
-      admin.build_menu :utility_navigation do |menu|
-        menu.add :label   => proc{ [current_active_admin_user.profile.avatar.attached? ? image_tag(current_active_admin_user.profile.avatar.variant(resize: '100x100')) : nil, display_name(current_active_admin_user.name)].join.html_safe },
-          :url            => proc{ Rails.env.staging? ?  edit_admin_user_path(current_active_admin_user) : edit_user_path(current_active_admin_user) },
-          :id             => 'current_user',
-          :if             => proc{ current_active_admin_user? }
-        admin.add_logout_button_to_menu menu
-      end
-    end
-
     #
     # If you wanted to add a static menu item to the default menu provided:
     #
@@ -298,7 +287,7 @@ if Object.const_defined?("ActiveAdmin")
     # By default, the footer shows the current Active Admin version. You can
     # override the content of the footer here.
     #
-    config.footer = "<b><a href=\"#{URI::HTTP.build(host: Rails.application.credentials[Rails.env.to_sym][:app][:domain])}\">#{Rails.application.credentials[Rails.env.to_sym][:app][:name]}</a> ©️ #{Date.today.year}</b>".html_safe
+    config.footer = "<b><a href=\"#{URI::HTTP.build(host: Rails.application.credentials.dig(Rails.env.to_sym,:app,:domain))}\">#{Rails.application.credentials.dig(Rails.env.to_sym,:app,:name)}</a> ©️ #{Date.today.year}</b>".html_safe
 
   end
 
