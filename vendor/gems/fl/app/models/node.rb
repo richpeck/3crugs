@@ -23,7 +23,7 @@ class Node < ApplicationRecord
 
       # Friendly ID
       extend FriendlyId
-      friendly_id :title
+      friendly_id :ref
 
       # Accepts Nested Attributes
       accepts_nested_attributes_for :associations

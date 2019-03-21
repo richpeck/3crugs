@@ -91,18 +91,6 @@ if Object.const_defined?('ActiveAdmin')
     # => Allows us to import/update products from the CSV
     collection_action :import do
 
-      # => Vars
-      api = Meta::Option.find_by(ref: "app_ekm")
-      csv = Meta::Option.find_by(ref: "app_csv")
-
-      # => Download CSV from Dropbox
-      # => This can be done through HTTP (no need for API)
-      csv_text = open('http://example.com/image.png')
-IO.copy_stream(download, '~/image.png')
-      csv = CSV.parse(csv_text, :headers => true)
-      csv.each do |row|
-        Moulding.create!(row.to_hash)
-      end
 
       # => Populate table with data
       # => This should create or update present data

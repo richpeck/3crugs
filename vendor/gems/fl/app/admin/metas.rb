@@ -88,7 +88,6 @@ if Object.const_defined?('ActiveAdmin')
               f.input :ref
               f.input :val, as: :trix_editor
             end
-
             f.actions
         	end
 
