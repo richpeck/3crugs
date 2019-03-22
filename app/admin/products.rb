@@ -109,6 +109,7 @@ if Object.const_defined?('ActiveAdmin')
       zip = Meta::Option.find_by(ref: "app_csv").val || nil
 
       # => Scoped vars
+      # => Since these are called inside the loop, we need to declare them here to ensure they're accessible
       csv_file = nil
       path = nil
 
@@ -129,11 +130,11 @@ if Object.const_defined?('ActiveAdmin')
       # => https://www.rubyguides.com/2018/10/parse-csv-ruby/
       csv = CSV.open(path, headers: :first_row).map(&:to_h) # => https://stackoverflow.com/a/48985892/1143732
       csv.map! { |x| x.deep_transform_keys { |key| key.to_s.gsub(' ', '').underscore } }
-      csv.each do |x|
-        x.merge!({created_at: DateTime.now})
-        x.merge!({updated_at: DateTime.now})
-      end
-      Product.upsert_all(csv) # => https://edgeapi.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all
+
+      # => Upsert All
+      # => Allows us to update existing records and insert new ones
+      # => https://edgeapi.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all
+      Product.upsert_all csv, unique_by: :vad_variant_code
 
       # => Redirect to collection path
       redirect_to collection_path, notice: "Products imported successfully!"

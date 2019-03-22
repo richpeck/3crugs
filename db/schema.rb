@@ -77,8 +77,8 @@ ActiveRecord::Schema.define(version: 2019_03_21_112427) do
     t.integer "free_stock"
     t.integer "on_order"
     t.date "eta"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "profiles", force: :cascade do |t|
