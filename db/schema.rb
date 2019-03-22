@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 2019_03_21_112427) do
     t.date "eta"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["vad_variant_code"], name: "index_products_on_vad_variant_code", unique: true
   end
 
   create_table "profiles", force: :cascade do |t|

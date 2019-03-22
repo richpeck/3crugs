@@ -134,7 +134,14 @@ if Object.const_defined?('ActiveAdmin')
       # => Upsert All
       # => Allows us to update existing records and insert new ones
       # => https://edgeapi.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all
-      Product.upsert_all csv, unique_by: :vad_variant_code
+      # => Added "insert" gem whilst upsert_all in beta - https://ankane.org/bulk-upsert
+      #Product.upsert_all(csv)
+      Product.import csv,
+        validate: false,
+        on_duplicate_key_update: {
+          conflict_target: [:vad_variant_code],
+          columns: [:free_stock, :on_order, :eta]
+        }
 
       # => Redirect to collection path
       redirect_to collection_path, notice: "Products imported successfully!"

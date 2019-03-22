@@ -75,6 +75,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'bootsnap', '~> 1.3', '>= 1.3.2', require: false  # => Boot caching (introduced in 5.2.x)
 gem 'rubyzip', '~> 1.2', '>= 1.2.2'                   # => Used to unpack the CSV (why they've uploaded it as a zip is beyond me)
 gem 'friendly_id', github: 'norman/friendly_id'       # => Fixes for Rails 6.0.0.beta3
+gem 'activerecord-import', '~> 1.0', '>= 1.0.1'       # => Whilst upsert_all in beta // https://github.com/zdennis/activerecord-import
 
 ## Active Admin ##
 ## Because of changes to Rails 6.0.0.beta3, need to keep these here for now ##

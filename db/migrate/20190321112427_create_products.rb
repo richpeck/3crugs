@@ -6,8 +6,10 @@ class CreateProducts < ActiveRecord::Migration::Current
 
     # => Up
     def up
-      create_table table, options do |t|
-        t.string      :vad_variant_code, unique: true
+      create_table table do |t|
+
+        # => Items
+        t.string      :vad_variant_code
         t.string      :vad_description
         t.bigint      :vad_ean_code
         t.integer     :free_stock
@@ -15,6 +17,9 @@ class CreateProducts < ActiveRecord::Migration::Current
         t.date        :eta
         t.datetime    :created_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }
         t.datetime    :updated_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }
+
+        # => Index
+        t.index       :vad_variant_code, unique: true
       end
     end
 
