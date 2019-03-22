@@ -47,11 +47,16 @@ if Object.const_defined?('ActiveAdmin')
     ##################################
 
     # => Actions
-    actions :index, :import, :destroy, :destroy_all
+    actions :index,:destroy
 
     # => Action Button (top right)
     action_item "Destroy" do
       link_to "❌ Destroy All", destroy_all_admin_products_path, method: :delete
+    end
+
+    # => Action Button (top right)
+    action_item "Sync" do
+      link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
     end
 
     # => Action Button (top right)
@@ -68,13 +73,15 @@ if Object.const_defined?('ActiveAdmin')
       selectable_column
       column "Product Code", :vad_variant_code
       column "Description",  :vad_description
-      column "EAN",          :vad_ean_code
       column "Stock",        :free_stock
       column "On Order",     :on_order
       column "ETA",          :eta
-      column :created_at
-      column :updated_at
-      actions
+      column "Synced At",    :synced_at
+      column                 :created_at
+      column                 :updated_at
+      actions name: "Actions", default: true do |product|
+        link_to "✔️", sync_admin_product_path(product), title: "Sync", style: "text-decoration: none; vertical-align: center;", method: :post
+      end
     end
 
     # =>  Form (Edit/New)
@@ -92,12 +99,49 @@ if Object.const_defined?('ActiveAdmin')
 
     ##################################
     ##################################
+    ## Member Actions
+    ##################################
+    ##################################
+
+    # => Sync
+    # => Allows us to sync individual products
+    member_action :sync, method: :post do
+      resource.sync!
+      redirect_to collection_path, notice: "#{resource.vad_description} synced successfully"
+    end
+
+    ##################################
+    ##################################
+    ## Batch Actions
+    ##################################
+    ##################################
+
+    # => Sync
+    # => Allows us to sync specific products
+    batch_action :sync do |ids|
+      batch_action_collection.find(ids).each do |product|
+        product.sync!
+      end
+      redirect_to collection_path, noticed: "Products synced successfully!"
+    end
+
+    ##################################
+    ##################################
+    ## Top Right (Actions)
+    ##################################
+    ##################################
 
     # => Destroy All
     # => Allows us to remove all elements of single entry
     collection_action :destroy_all, method: :delete do
       Product.delete_all
       redirect_to collection_path, notice: "Products deleted successfully!"
+    end
+
+    # => Sync All
+    collection_action :sync_all, method: :post do
+      Product.sync_all
+      redirect_to collection_path, notice: "Products synced successfully!"
     end
 
     # => Custom Action

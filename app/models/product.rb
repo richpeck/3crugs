@@ -22,6 +22,11 @@ class Product < ApplicationRecord
   # => Aliases
   alias_attribute :product_code, :vad_variant_code
 
+  # => Sync
+  def sync!
+    update_attributes synced_at: DateTime.now
+  end
+
 end
 
 ############################################################

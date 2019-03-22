@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2019_03_21_112427) do
     t.integer "free_stock"
     t.integer "on_order"
     t.date "eta"
+    t.datetime "synced_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["vad_variant_code"], name: "index_products_on_vad_variant_code", unique: true
