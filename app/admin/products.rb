@@ -47,7 +47,12 @@ if Object.const_defined?('ActiveAdmin')
     ##################################
 
     # => Actions
-    actions :index, :import, :destroy
+    actions :index, :import, :destroy, :destroy_all
+
+    # => Action Button (top right)
+    action_item "Destroy" do
+      link_to "❌ Destroy All", destroy_all_admin_products_path, method: :delete
+    end
 
     # => Action Button (top right)
     action_item "Import" do
@@ -87,6 +92,13 @@ if Object.const_defined?('ActiveAdmin')
 
     ##################################
     ##################################
+
+    # => Destroy All
+    # => Allows us to remove all elements of single entry
+    collection_action :destroy_all, method: :delete do
+      Product.delete_all
+      redirect_to collection_path, notice: "Products deleted successfully!"
+    end
 
     # => Custom Action
     # => Allows us to import/update products from the CSV
