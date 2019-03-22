@@ -51,7 +51,7 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Destroy" do
-      link_to "❌ Destroy All", destroy_all_admin_products_path, method: :delete
+      link_to "❌ Destroy All", destroy_all_admin_products_path, method: :delete  if Product.any?
     end
 
     # => Action Button (top right)
