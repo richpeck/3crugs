@@ -40,8 +40,8 @@ if Object.const_defined?('ActiveAdmin')
     # => Menu
     menu priority: 3, label: -> { @@name }
 
-    # => Params
-    permit_params :email, :password, :password_confirmation, profile_attributes: [:id, :name, :role, :public, :avatar]  # => :avatar_attributes: [:id, FL::FILE, :_destroy] // This used to give us deep nested model - but can just attach the asset directly without custom table now
+    # => Default Sort Order
+    config.sort_order = 'vad_variant_code_asc'
 
     ##################################
     ##################################
