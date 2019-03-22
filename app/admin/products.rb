@@ -96,13 +96,18 @@ if Object.const_defined?('ActiveAdmin')
       api = Meta::Option.find_by(ref: "app_ekm").val || nil
       zip = Meta::Option.find_by(ref: "app_csv").val || nil
 
+      # => Scoped vars
+      csv_file = nil
+      path = nil
+
       # => Download CSV from Dropbox
       # => This can be done through HTTP (no need for API)
       file = open zip
       Zip::File.open(file) do |zipfile|
         zipfile.each do |file|
-          if file.to_s.strip == "Think Rugs Stock.csv"
-            puts "hit"
+          if file.name.to_s.strip == "Think Rugs Stock.csv"
+            path     = Rails.root.join("tmp", "cache", file.name.to_s)  # => ./tmp/cache/Think Rugs Stock.csv
+            csv_file = zipfile.extract(file, path) { true }
           end
         end
       end
@@ -110,10 +115,13 @@ if Object.const_defined?('ActiveAdmin')
       # => Populate table with data
       # => This should create or update present data
       # => https://www.rubyguides.com/2018/10/parse-csv-ruby/
-      csv = CSV.read csv_text, headers: true
-      csv.each do |row|
-        Product.find_or_create_by(vad_variant_code: row["vad_variant_code"], vad_description: row["vad_description"], vad_ean_code: row["vad_ean_code"], free_stock: row["free_stock"], on_order: row["on_order"], eta: row["on_order"])
+      csv = CSV.open(path, headers: :first_row).map(&:to_h) # => https://stackoverflow.com/a/48985892/1143732
+      csv.map! { |x| x.deep_transform_keys { |key| key.to_s.gsub(' ', '').underscore } }
+      csv.each do |x|
+        x.merge!({created_at: DateTime.now})
+        x.merge!({updated_at: DateTime.now})
       end
+      Product.upsert_all(csv) # => https://edgeapi.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all
 
       # => Redirect to collection path
       redirect_to collection_path, notice: "Products imported successfully!"

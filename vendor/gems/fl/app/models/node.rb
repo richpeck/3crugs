@@ -59,9 +59,6 @@ class Node < ApplicationRecord
       scope :ref, ->(ref) { where ref: ref }
       scope :val, ->(val) { where val: val }
 
-      # => Excluding
-      scope :excluding, ->(vars) { where().not ref: vars }
-
   ####################################################################
 
 end

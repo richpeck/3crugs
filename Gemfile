@@ -13,7 +13,7 @@ source 'https://rails-assets.org' # => (Heroku) https://github.com/tenex/rails-a
 ruby [RUBY_VERSION, '2.6.1'].min
 
 # => Rails
-gem 'rails', '~> 6.0.0.beta3'
+gem 'rails', github: 'rails/rails' #'~> 6.0.0.beta3'
 
 # => Server
 # => Default dev development for Rails 5 but still needs the gem....
