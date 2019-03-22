@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 2019_03_21_112427) do
   create_table "products", force: :cascade do |t|
     t.string "vad_variant_code"
     t.string "vad_description"
-    t.integer "vad_ean_code"
+    t.bigint "vad_ean_code"
     t.integer "free_stock"
     t.integer "on_order"
     t.date "eta"
