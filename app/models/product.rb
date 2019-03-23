@@ -40,20 +40,31 @@ class Product < ApplicationRecord
 
     # => Savon
     # => This allows us to send the request
-    client = Savon.client(wsdl: "http://publicapi.15.ekm.net/v1.1/publicapi.asmx?WSDL")
-
-    puts client.operations
+    # => https://stackoverflow.com/q/26990946/1143732
+    client = Savon.client do
+      wsdl "http://publicapi.15.ekm.net/v1.1/publicapi.asmx?WSDL"
+      endpoint "http://publicapi.15.ekm.net/v1.1/publicapi.asmx"
+      env_namespace :soap
+      namespace_identifier nil
+      strip_namespaces true
+      pretty_print_xml true
+      element_form_default :unqualified
+      convert_request_keys_to :camelcase
+      namespaces "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema", "xmlns:soap" => "http://schemas.xmlsoap.org/soap/envelope/"
+      logger Rails.logger
+      log true
+    end
 
     # => To raise errors
     begin
-      client.call(:set_product_stock, message: { APIKey: api, ProductCode: vad_variant_code, ProductStock: free_stock }, convert_request_keys_to: :camelcase)
+      client.call(:set_product_stock, message: { SetProductStockRequest: { APIKey: api, ProductCode: vad_variant_code, ProductStock: free_stock }} )
     rescue Savon::Error => error
       Rails.logger.info error.inspect()
       raise
     end
 
     # => Update the db
-    update_attributes synced_at: DateTime.now
+    update synced_at: DateTime.now
   end
 
 end
