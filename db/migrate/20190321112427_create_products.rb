@@ -15,6 +15,7 @@ class CreateProducts < ActiveRecord::Migration::Current
         t.integer     :free_stock
         t.integer     :on_order
         t.date        :eta
+        t.text        :response
         t.datetime    :synced_at
         t.datetime    :created_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }
         t.datetime    :updated_at, null: false, default: -> { 'CURRENT_TIMESTAMP' }

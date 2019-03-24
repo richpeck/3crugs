@@ -15,7 +15,7 @@
 ############################################################
 
 ## Dependencies ##
-require 'savon'     # => SOAP API management
+require 'savon' # => SOAP API management
 
 ############################################################
 ############################################################
@@ -28,6 +28,17 @@ class Product < ApplicationRecord
 
   # => Aliases
   alias_attribute :product_code, :vad_variant_code
+
+  # => Response
+  # => Allows us to return formatted response data
+  def response
+    if self[:response].present?
+      body = ActiveSupport::HashWithIndifferentAccess.new JSON.parse(self[:response])
+      status = body.dig("set_product_stock_response", "set_product_stock_result", "status") || ""
+      error  = body.dig("set_product_stock_response", "set_product_stock_result", "errors", "string") || ""
+      return error.blank? ? status : error
+    end
+  end
 
   # => Sync
   # => Uses Savon gem to communicate with EKM API
@@ -52,19 +63,18 @@ class Product < ApplicationRecord
       convert_request_keys_to :camelcase
       namespaces "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xmlns:xsd" => "http://www.w3.org/2001/XMLSchema", "xmlns:soap" => "http://schemas.xmlsoap.org/soap/envelope/"
       logger Rails.logger
-      log true
+      log false
     end
 
-    # => To raise errors
-    begin
-      client.call(:set_product_stock, message: { SetProductStockRequest: { APIKey: api, ProductCode: vad_variant_code, ProductStock: free_stock }} )
-    rescue Savon::Error => error
-      Rails.logger.info error.inspect()
-      raise
-    end
+    # => Response
+    # => Allows us to record response delivered by the API
+    # => Used "response" as attribute, use returned instead
+    returned = client.call(:set_product_stock, message: { SetProductStockRequest: { APIKey: api, ProductCode: vad_variant_code, ProductStock: free_stock }} )
 
-    # => Update the db
-    update synced_at: DateTime.now
+    # => Update DB
+    # => Allows us to record exactly what happened
+    # => Since API just spits out error responses, we can just record them (don't need to rescue any exceptions)
+    update response: returned.body.to_json, synced_at: DateTime.now
   end
 
 end

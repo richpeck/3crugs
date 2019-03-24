@@ -76,6 +76,7 @@ if Object.const_defined?('ActiveAdmin')
       column "Stock",        :free_stock
       column "On Order",     :on_order
       column "ETA",          :eta
+      column "Response",     :response
       column "Synced At",    :synced_at
       column                 :created_at
       column                 :updated_at
