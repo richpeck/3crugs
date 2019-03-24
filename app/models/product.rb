@@ -29,6 +29,14 @@ class Product < ApplicationRecord
   # => Aliases
   alias_attribute :product_code, :vad_variant_code
 
+  # => Sync All
+  # => Allows us to sync every product
+  def self.sync_all
+    all.each do |product|
+      product.sync!
+    end
+  end
+
   # => Response
   # => Allows us to return formatted response data
   def response
