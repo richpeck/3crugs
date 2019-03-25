@@ -33,7 +33,7 @@ class Product < ApplicationRecord
   # => Allows us to sync every product
   def self.sync_all
     self.ids.each do |product|
-      SyncJob.perform_now product
+      SyncJob.perform_later product
     end
   end
 
@@ -78,9 +78,6 @@ class Product < ApplicationRecord
     # => Allows us to record response delivered by the API
     # => Used "response" as attribute, use returned instead
     returned = client.call(:set_product_stock, message: { SetProductStockRequest: { APIKey: api, ProductCode: vad_variant_code, ProductStock: free_stock }} )
-
-    # => Simple log
-    Rails.logger.info "#{vad_variant_code} synced"
 
     # => Update DB
     # => Allows us to record exactly what happened

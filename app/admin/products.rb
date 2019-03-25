@@ -15,9 +15,10 @@
 ############################################################
 
 # => Dependencies
-require 'csv'       # => Read CSV
-require 'open-uri'  # => Download file
-require 'zip'       # => Unzip archive
+require 'csv'         # => Read CSV
+require 'open-uri'    # => Download file
+require 'zip'         # => Unzip archive
+require 'sidekiq/api' # => Allows us to check if queue is running
 
 ############################################################
 ############################################################
@@ -141,8 +142,9 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Sync All
     collection_action :sync_all, method: :post do
-      Sidekiq.redis { |conn| conn.flushall }
+      #Sidekiq.redis { |conn| conn.flushall }
       Product.sync_all
+      puts Sidekiq::Queue.new("sync").size
       redirect_to collection_path, notice: "Products synced successfully!"
     end
 
