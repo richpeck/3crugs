@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SyncAllJobTest < ActiveJob::TestCase
+class SyncJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end

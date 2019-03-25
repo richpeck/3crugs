@@ -15,7 +15,7 @@
 ## Sync All ##
 ## Because of rate limiting, we need to queue the jobs ##
 ## This needs to be handled with Sidekik or Redis ##
-class SyncAllJob < ApplicationJob
+class SyncJob < ApplicationJob
   queue_as :sync
 
   ## Perform Queue ##
@@ -24,7 +24,7 @@ class SyncAllJob < ApplicationJob
     product = Product.find product_id
     product.sync!
   end
-  
+
 end
 
 ############################################################

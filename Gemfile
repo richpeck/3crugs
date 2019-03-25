@@ -78,6 +78,11 @@ gem 'friendly_id', github: 'norman/friendly_id'       # => Fixes for Rails 6.0.0
 gem 'activerecord-import', '~> 1.0', '>= 1.0.1'       # => Whilst upsert_all in beta // https://github.com/zdennis/activerecord-import
 gem 'savon', '~> 2.12'                                # => Wrapper for SOAP API's (required for EKM)
 
+## Queues ##
+## This allows us to use ActiveJob to handle the "sync all" feature ##
+gem 'sidekiq', '~> 5.2', '>= 5.2.5'     # => Sidekiq to manage the processing of jobs (held in Redis etc)
+gem 'sidekiq-rate-limiter', '~> 0.1.2'  # => Allows us to limit the number of jobs sidekiq processes per minute/hour/day (required for EKM)
+
 ## Active Admin ##
 ## Because of changes to Rails 6.0.0.beta3, need to keep these here for now ##
 ## When Rails 6.0 is released, I'm sure we can remove them ##
