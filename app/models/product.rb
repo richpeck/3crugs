@@ -33,7 +33,7 @@ class Product < ApplicationRecord
   # => Allows us to sync every product
   def self.sync_all
     all.each do |product|
-      product.sync!
+      SyncJob.perform_later product
     end
   end
 

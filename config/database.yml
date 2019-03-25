@@ -1,25 +1,75 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
-#
+##########################################################
+##########################################################
+##                    ____________                      ##
+##                    |  _  \ ___ \                     ##
+##                    | | | | |_/ /                     ##
+##                    | | | | ___ \                     ##
+##                    | |/ /| |_/ /                     ##
+##                    |___/ \____/                      ##
+##########################################################
+##########################################################
+
+## Notes ##
+## http://stackoverflow.com/questions/35454814/how-to-use-secrets-yml-in-ruby-on-rails-4-to-store-a-password-in-database-yml
+## Can use Rails.application.secrets IF referencing hash:
+## Rails.application.secrets[:db][:name]
+
+##########################################################
+##########################################################
+##########################################################
+
+# Default
 default: &default
-  adapter: sqlite3
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  pool:     5
+  timeout:  5000
+
+##########################################################
+##########################################################
+
+# Development
+dev: &dev
+  adapter:  sqlite3
+
+# Production
+prod: &prod
+  adapter:  <%= Rails.application.credentials.dig(Rails.env.to_sym, :db, :adpt) %>
+  database: <%= Rails.application.credentials.dig(Rails.env.to_sym, :db, :name) %>
+  username: <%= Rails.application.credentials.dig(Rails.env.to_sym, :db, :user) %>
+  password: <%= Rails.application.credentials.dig(Rails.env.to_sym, :db, :pass) %>
+  host:     <%= Rails.application.credentials.dig(Rails.env.to_sym, :db, :host) %>
+  port:     <%= Rails.application.credentials.dig(Rails.env.to_sym, :db, :port) %>
+
+##########################################################
+##########################################################
+##########################################################
 
 development:
   <<: *default
+  <<: *dev
   database: db/development.sqlite3
+
+##########################################################
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
+  <<: *dev
   database: db/test.sqlite3
+
+##########################################################
+##########################################################
+
+staging:
+  <<: *default
+  <<: *prod
+
+##########################################################
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  <<: *prod
+
+##########################################################
+##########################################################
