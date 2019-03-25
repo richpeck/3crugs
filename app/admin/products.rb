@@ -57,7 +57,11 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Sync" do
-      link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
+      if Sidekiq::Queue.new("sync").size > 0
+        link_to "🕒 Queue Processing (#{Sidekiq::Queue.new('sync').size} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
+      else
+        link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
+      end
     end
 
     # => Action Button (top right)
@@ -133,6 +137,12 @@ if Object.const_defined?('ActiveAdmin')
     ##################################
     ##################################
 
+    # => Cancel Sync
+    collection_action :cancel_sync, method: :delete do
+      Sidekiq.redis { |conn| conn.flushall }
+      redirect_to collection_path, notice: "Queue cancelled (#{Sidekiq::Queue.new('sync').size} items)"
+    end
+
     # => Destroy All
     # => Allows us to remove all elements of single entry
     collection_action :destroy_all, method: :delete do
@@ -142,9 +152,7 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Sync All
     collection_action :sync_all, method: :post do
-      #Sidekiq.redis { |conn| conn.flushall }
       Product.sync_all
-      puts Sidekiq::Queue.new("sync").size
       redirect_to collection_path, notice: "Products synced successfully!"
     end
 
