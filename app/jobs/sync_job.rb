@@ -17,6 +17,7 @@
 ## This needs to be handled with Sidekik or Redis ##
 class SyncJob < ApplicationJob
   queue_as :sync
+  throttle threshold: 2, period: 1.second # => ActiveJobThrottle
 
   ## Perform Queue ##
   ## This allows us to send ID's from Resque/Sidekik and process them sequentially ##

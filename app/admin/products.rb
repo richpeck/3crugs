@@ -56,7 +56,7 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Sync" do
-      link_to "⌚ Sync All", sync_all_admin_products_path, method: :post if Product.any?
+      link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
     end
 
     # => Action Button (top right)
@@ -123,7 +123,7 @@ if Object.const_defined?('ActiveAdmin')
       batch_action_collection.find(ids).each do |product|
         product.sync!
       end
-      redirect_to collection_path, notice: "Products synced successfully!"
+      redirect_to collection_path, notice: "Sync started!"
     end
 
     ##################################
@@ -141,6 +141,7 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Sync All
     collection_action :sync_all, method: :post do
+      Sidekiq.redis { |conn| conn.flushall }
       Product.sync_all
       redirect_to collection_path, notice: "Products synced successfully!"
     end
