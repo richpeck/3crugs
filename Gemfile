@@ -27,8 +27,7 @@ gem 'fl', path: 'vendor/gems/fl'
 # => DB
 # => https://github.com/rrrene/projestimate/blob/master/Gemfile#L11
 gem 'sqlite3', '1.3.13', group: :development
-gem 'pg',                group: :staging
-gem 'mysql2',            group: :production
+gem 'pg',                groups: [:staging, :production]
 
 ########################################
 ########################################
