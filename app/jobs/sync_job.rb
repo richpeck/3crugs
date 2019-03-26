@@ -15,7 +15,7 @@
 ## Sync All ##
 ## Because of rate limiting, we need to queue the jobs ##
 ## This needs to be handled with Sidekik or Redis ##
-class SyncJob < ApplicationJob
+class SyncJob < ActiveJob::Base
   queue_as :sync
   throttle threshold: 2, period: 1.second # => ActiveJobThrottle
 
