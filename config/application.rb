@@ -33,15 +33,19 @@ module Rugs
     # => Allows us to manage the queue for the "sync all" method
     config.active_job.queue_adapter = :sidekiq
 
+    # => ActiveJob Throttle
+    # => Allows us to manage the underlying rate limiting of API requests
+    ActiveJob::TrafficControl.client = Redis.new( host: Rails.application.credentials.dig(:base, :redis, :host), port: Rails.application.credentials.dig(:base, :redis, :port), password: Rails.application.credentials.dig(:base, :redis, :password))
+
     # => Redis
     # => Hosted at RedisLabs
     # => Both settings required to get it working
     Sidekiq.configure_client do |config|
-      config.redis = { url: 'redis://redis-10653.c77.eu-west-1-1.ec2.cloud.redislabs.com:10653', password:  'AX6YS7Ma4aJHm46AXooBLB63Lozw6doP' }
+      config.redis = { url: "redis://#{Rails.application.credentials.dig(:base, :redis, :host)}:#{Rails.application.credentials.dig(:base, :redis, :port)}", password:  Rails.application.credentials.dig(:base, :redis, :password) }
     end
 
     Sidekiq.configure_server do |config|
-      config.redis = { url: 'redis://redis-10653.c77.eu-west-1-1.ec2.cloud.redislabs.com:10653', password:  'AX6YS7Ma4aJHm46AXooBLB63Lozw6doP' }
+      config.redis = { url: "redis://#{Rails.application.credentials.dig(:base, :redis, :host)}:#{Rails.application.credentials.dig(:base, :redis, :port)}", password:  Rails.application.credentials.dig(:base, :redis, :password) }
     end
 
   end
