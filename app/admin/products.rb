@@ -160,44 +160,9 @@ if Object.const_defined?('ActiveAdmin')
     # => Allows us to import/update products from the CSV
     collection_action :import do
 
-      # => Vars
-      api = Meta::Option.find_by(ref: "app_ekm").val || nil
-      zip = Meta::Option.find_by(ref: "app_csv").val || nil
-
-      # => Scoped vars
-      # => Since these are called inside the loop, we need to declare them here to ensure they're accessible
-      csv_file = nil
-      path = nil
-
-      # => Download CSV from Dropbox
-      # => This can be done through HTTP (no need for API)
-      file = open zip
-      Zip::File.open(file) do |zipfile|
-        zipfile.each do |file|
-          if file.name.to_s.strip == "Think Rugs Stock.csv"
-            path     = Rails.root.join("tmp", "cache", file.name.to_s)  # => ./tmp/cache/Think Rugs Stock.csv
-            csv_file = zipfile.extract(file, path) { true }
-          end
-        end
-      end
-
-      # => Populate table with data
-      # => This should create or update present data
-      # => https://www.rubyguides.com/2018/10/parse-csv-ruby/
-      csv = CSV.open(path, headers: :first_row).map(&:to_h) # => https://stackoverflow.com/a/48985892/1143732
-      csv.map! { |x| x.deep_transform_keys { |key| key.to_s.gsub(' ', '').underscore } }
-
-      # => Upsert All
-      # => Allows us to update existing records and insert new ones
-      # => https://edgeapi.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all
-      # => Added "insert" gem whilst upsert_all in beta - https://ankane.org/bulk-upsert
-      #Product.upsert_all(csv)
-      Product.import csv,
-        validate: false,
-        on_duplicate_key_update: {
-          conflict_target: [:vad_variant_code],
-          columns: [:free_stock, :on_order, :eta]
-        }
+      # => Allows us to download the file
+      # => Should have logic here, but moved to model because Whenever gem needed it
+      Product.download_csv
 
       # => Redirect to collection path
       redirect_to collection_path, notice: "Products imported successfully!"
