@@ -128,6 +128,11 @@ class Product < ApplicationRecord
     # => Allows us to record exactly what happened
     # => Since API just spits out error responses, we can just record them (don't need to rescue any exceptions)
     update response: returned.body.to_json, synced_at: DateTime.now
+
+    # => Return true or false
+    # => This is to fix the "Too Many Requests" error
+    raise TooManyRequests if response.to_s.strip == "Too Many Requests"
+
   end
 
 end

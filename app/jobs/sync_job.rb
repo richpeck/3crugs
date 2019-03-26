@@ -19,6 +19,12 @@ class SyncJob < ActiveJob::Base
   queue_as :sync
   throttle threshold: 2, period: 5.seconds # => ActiveJobThrottle
 
+  ## Too Many Requests ##
+  ## Rescues the update and resubmits to the end of the queue ##
+  rescue_from(TooManyRequests) do
+    retry_job queue: :low_priority
+  end
+
   ## Perform Queue ##
   ## This allows us to send ID's from Resque/Sidekik and process them sequentially ##
   def perform(product_id)
