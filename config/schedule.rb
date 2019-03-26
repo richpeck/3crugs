@@ -21,7 +21,6 @@
 
 # => Run process every hour
 every 1.hour do # 1.minute 1.day 1.week 1.month 1.year is also supported
-  runner "Process.download_csv" # => Should be in the Activeadmin area but had to include here to ensure it worekd
-  rake "my:rake:task"
-  command "/usr/bin/my_great_command"
+  runner "Product.download_csv" # => Should be in the Activeadmin area but had to include here to ensure it worekd
+  runner "Product.sync_all"     # => Allows us to queue products in Sidekiq queue
 end
