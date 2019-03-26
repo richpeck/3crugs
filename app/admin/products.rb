@@ -57,6 +57,9 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Sync" do
+      scheduled = Sidekiq::ScheduledSet.new
+      #puts scheduled.size
+
       if Sidekiq::Queue.new("sync").size > 0
         link_to "🕒 Queue Processing (#{Sidekiq::Queue.new('sync').size} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
       else
@@ -146,6 +149,7 @@ if Object.const_defined?('ActiveAdmin')
     # => Destroy All
     # => Allows us to remove all elements of single entry
     collection_action :destroy_all, method: :delete do
+      Sidekiq.redis { |conn| conn.flushall }
       Product.delete_all
       redirect_to collection_path, notice: "Products deleted successfully!"
     end
