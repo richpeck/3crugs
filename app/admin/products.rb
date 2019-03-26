@@ -57,11 +57,13 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Sync" do
-      scheduled = Sidekiq::ScheduledSet.new
-      #puts scheduled.size
 
-      if Sidekiq::Queue.new("sync").size > 0
-        link_to "🕒 Queue Processing (#{Sidekiq::Queue.new('sync').size} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
+      scheduled = Sidekiq::ScheduledSet.new
+      queued    = Sidekiq::Queue.new("sync")
+      total     = scheduled.size + queued.size
+
+      if total > 0
+        link_to "🕒 Queue Processing (#{total} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
       else
         link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
       end
