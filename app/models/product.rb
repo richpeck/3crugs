@@ -73,13 +73,13 @@ class Product < ApplicationRecord
     # => https://edgeapi.rubyonrails.org/classes/ActiveRecord/Persistence/ClassMethods.html#method-i-upsert_all
     # => Added "insert" gem whilst upsert_all in beta - https://ankane.org/bulk-upsert
     #Product.upsert_all(csv)
-    Product.import csv,
+    self.import csv,
       validate: false,
       on_duplicate_key_update: {
         conflict_target: [:vad_variant_code],
         columns: [:free_stock, :on_order, :eta]
       }
-      
+
   end
 
   # => Response
