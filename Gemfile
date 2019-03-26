@@ -83,6 +83,10 @@ gem 'sidekiq', '~> 5.2', '>= 5.2.5'         # => Sidekiq to manage the processin
 gem 'redis', '~> 4.1'                       # => Redis (stores ActiveQueue jobs)
 gem 'activejob-traffic_control', '~> 0.1.3' # => Allows us to throttle the ActiveJob queue
 
+## Scheduling ##
+## Allows us to trigger the sync etc at specific times ##
+gem 'whenever', '~> 0.10.0' # => Allows us to determine the time to trigger the sync
+
 ## Active Admin ##
 ## Because of changes to Rails 6.0.0.beta3, need to keep these here for now ##
 ## When Rails 6.0 is released, I'm sure we can remove them ##
