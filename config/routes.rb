@@ -13,6 +13,14 @@
 ## Routes ##
 ## More in the FL Gem ##
 Rails.application.routes.draw do
+
+  # => Sidekiq
+  # => Allows us to monitor Sidekiq queues etc
+  authenticate :user do
+    require 'sidekiq/web'
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
 end
 
 ###############################################
