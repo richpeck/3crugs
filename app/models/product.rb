@@ -131,8 +131,7 @@ class Product < ApplicationRecord
 
     # => Return true or false
     # => This is to fix the "Too Many Requests" error
-    raise TooManyRequests if response.to_s.strip == "Too Many Requests"
-
+    raise StandardError, "Too Many Requests" if response.to_s.strip == "Too Many Requests"
   end
 
 end
