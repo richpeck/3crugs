@@ -33,6 +33,12 @@ class SyncJob < ActiveJob::Base
     product = Product.find product_id
     product.sync!
 
+    # => Update
+    unless Product.queue_size > 0
+      queue = Meta::Sync.find_By(ref: job_id)
+      queue.update val: queue.val + "\nFinished: #{DateTime.now}"
+    end
+
   end
 
 end
