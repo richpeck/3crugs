@@ -25,18 +25,20 @@ class SyncJob < ActiveJob::Base
     retry_job queue: :sync
   end
 
-  ## After Perform ##
-  ## Make sure system is updated ##
-  after_perform do |job|
-    queue = Meta::Sync.find_By(ref: job.job_id)
-    queue.update val: queue.val + "\n Finished: #{Time.now}"
-  end
-
   ## Perform Queue ##
   ## This allows us to send ID's from Resque/Sidekik and process them sequentially ##
-  def perform(product_id)
+  def perform(product_id, job_id)
+
+    # => Sync
     product = Product.find product_id
     product.sync!
+
+    # => Update
+    if Product.queue_size > 0
+      queue = Meta::Sync.find_By(ref: job_id)
+      queue.update val: queue.val + "\nFinished: #{DateTime.now}"
+    end
+
   end
 
 end
