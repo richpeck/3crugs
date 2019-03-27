@@ -36,11 +36,13 @@ class Product < ApplicationRecord
     # => Cycle
     self.ids.each do |product|
       job = SyncJob.perform_later product
+      puts job.provider_job_id
     end
 
-    # => Create or update Sync object
-    queue = Meta::Sync.find_or_create_by(ref: job.provider_job_id)
-    queue.update val: 'Active'
+    # => Queue
+    #queue = Meta::Sync.find_or_create_by(ref: job.provider_job_id)
+    #queue.update val: "\n Started: #{Time.now}"
+
   end
 
   # => CSV

@@ -82,6 +82,7 @@ gem 'savon', '~> 2.12'                                # => Wrapper for SOAP API'
 gem 'sidekiq', '~> 5.2', '>= 5.2.5'         # => Sidekiq to manage the processing of jobs (held in Redis etc)
 gem 'redis', '~> 4.1'                       # => Redis (stores ActiveQueue jobs)
 gem 'activejob-traffic_control', '~> 0.1.3' # => Allows us to throttle the ActiveJob queue
+gem 'activejob-cancel', '~> 0.3.0'          # => Allows us to cancel jobs
 
 ## Scheduling ##
 ## Allows us to trigger the sync etc at specific times ##
