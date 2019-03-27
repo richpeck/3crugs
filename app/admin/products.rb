@@ -86,7 +86,7 @@ if Object.const_defined?('ActiveAdmin')
       column                 :created_at
       column                 :updated_at
       actions name: "Actions", default: true do |product|
-        link_to "✔️", sync_admin_product_path(product), title: "Sync", style: "text-decoration: none; vertical-align: center;", method: :post unless sidekiq_total > 0
+        link_to "✔️", sync_admin_product_path(product), title: "Sync", style: "text-decoration: none; vertical-align: center;", method: :post unless Product.queue_size > 0
       end
     end
 
