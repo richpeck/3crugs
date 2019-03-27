@@ -29,6 +29,7 @@ class SyncJob < ActiveJob::Base
   ## This allows us to send ID's from Resque/Sidekik and process them sequentially ##
   def perform(product_id)
     product = Product.find product_id
+    #sync    = Meta::Sync.find_by ref 
     product.sync!
   end
 

@@ -57,13 +57,8 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Sync" do
-
-      scheduled = Sidekiq::ScheduledSet.new
-      queued    = Sidekiq::Queue.new("sync")
-      total     = scheduled.size + queued.size
-
-      if total > 0
-        link_to "🕒 Queue Processing (#{total} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
+      if sidekiq_total > 0
+        link_to "🕒 Queue Processing (#{sidekiq_total} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
       else
         link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
       end
@@ -91,11 +86,11 @@ if Object.const_defined?('ActiveAdmin')
       column                 :created_at
       column                 :updated_at
       actions name: "Actions", default: true do |product|
-        link_to "✔️", sync_admin_product_path(product), title: "Sync", style: "text-decoration: none; vertical-align: center;", method: :post
+        link_to "✔️", sync_admin_product_path(product), title: "Sync", style: "text-decoration: none; vertical-align: center;", method: :post unless sidekiq_total > 0
       end
     end
 
-    # =>  Form (Edit/New)
+    # => Form (Edit/New)
     form title: proc { |product| ['Editing', product.product_code].join(' ') } do |f|
       f.inputs "Details" do
         f.input :vad_variant_code,  inner_html: { placeholder: "Product Code" }
@@ -106,6 +101,17 @@ if Object.const_defined?('ActiveAdmin')
         f.input :eta
       end
       f.actions
+    end
+
+    ##################################
+    ##################################
+    ## Extras
+    ##################################
+    ##################################
+
+    # => Controller
+    controller do
+      include ApplicationHelper
     end
 
     ##################################
@@ -145,7 +151,7 @@ if Object.const_defined?('ActiveAdmin')
     # => Cancel Sync
     collection_action :cancel_sync, method: :delete do
       Sidekiq.redis { |conn| conn.flushall }
-      redirect_to collection_path, notice: "Queue cancelled (#{Sidekiq::Queue.new('sync').size} items)"
+      redirect_to collection_path, notice: "Queue cancelled (#{sidekiq_total} items)"
     end
 
     # => Destroy All

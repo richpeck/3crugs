@@ -13,7 +13,8 @@
 ## Info ##
 models = {
   product:      {priority: 3},
-  option:       {priority: 4}
+  sync:         {priority: 4},
+  option:       {priority: 5}
 }
 ############################################################
 ############################################################
@@ -45,11 +46,11 @@ if Object.const_defined?('ActiveAdmin')
           # => Menu
           menu priority: models.try(:[], meta.to_sym).try(:[], :priority), label: -> { [I18n.t("activerecord.models.meta/#{meta}.icon"), (models.try(:[], meta.to_sym).try(:[], :label) || model.model_name.human(count: 2))].join(' ') }
 
-          ##################################
-          ##################################
-
-          # => Strong Params
+          # => Params
           permit_params :slug, :ref, :val
+
+          # => Actions
+          actions :index,:destroy
 
           ##################################
           ##################################
@@ -57,20 +58,13 @@ if Object.const_defined?('ActiveAdmin')
           # => Index
           index title: [I18n.t("activerecord.models.meta/#{meta}.icon"), (models.try(:[], meta.to_sym).try(:[], :label) || model.model_name.human(count: 2)), '|', Rails.application.credentials[Rails.env.to_sym][:app][:name] ].join(' ') do
             selectable_column
-            if meta.to_sym == :platform
-              column "Logo", :title do |platform|
-                platform.try(:logo) || platform.title
-              end
+            if meta.to_sym == :sync
+              column "ID", :ref
             else
               column :title
             end
             column "Info" do |x|
               x.value.html_safe
-            end
-            if meta.to_sym == :platform
-              Node.ref('feature').pluck(:val).each do |feature|
-                column feature
-              end
             end
             %i(created_at updated_at).each do |x|
               column x

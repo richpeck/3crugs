@@ -13,6 +13,10 @@ en:
         icon:   '📦'
         one:    'Product'
         other:  'Products'
+      meta/sync:
+        icon:    '⏱️'
+        one:     'Queue'
+        other:   'Queues'
       meta/option:
         icon:   '🔒'
         one:    'Option'

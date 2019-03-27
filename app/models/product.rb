@@ -31,10 +31,16 @@ class Product < ApplicationRecord
 
   # => Sync All
   # => Allows us to sync every product
-  def self.sync_all
+  def self.sync_all job=""
+
+    # => Cycle
     self.ids.each do |product|
-      SyncJob.perform_later product
+      job = SyncJob.perform_later product
     end
+
+    # => Create or update Sync object
+    queue = Meta::Sync.find_or_create_by(ref: job.provider_job_id)
+    queue.update val: 'Active'
   end
 
   # => CSV
