@@ -36,13 +36,20 @@ class Product < ApplicationRecord
     # => Cycle
     self.ids.each do |product|
       job = SyncJob.perform_later product
-      puts job.provider_job_id
     end
 
     # => Queue
     #queue = Meta::Sync.find_or_create_by(ref: job.provider_job_id)
     #queue.update val: "\n Started: #{Time.now}"
 
+  end
+
+  # => Queue Size
+  # => Should be in helper but had to move her eto get working with 'whenever' gem
+  def self.queue_size
+    scheduled = Sidekiq::ScheduledSet.new
+    queued    = Sidekiq::Queue.new("sync")
+    scheduled.size + queued.size
   end
 
   # => CSV

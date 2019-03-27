@@ -57,8 +57,8 @@ if Object.const_defined?('ActiveAdmin')
 
     # => Action Button (top right)
     action_item "Sync" do
-      if sidekiq_total > 0
-        link_to "🕒 Queue Processing (#{sidekiq_total} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
+      if Product.queue_size > 0
+        link_to "🕒 Queue Processing (#{Product.queue_size} Items Left)", cancel_sync_admin_products_path, method: :delete, title: "Cancel"
       else
         link_to "✔️ Sync All", sync_all_admin_products_path, method: :post if Product.any?
       end
@@ -151,7 +151,7 @@ if Object.const_defined?('ActiveAdmin')
     # => Cancel Sync
     collection_action :cancel_sync, method: :delete do
       Sidekiq.redis { |conn| conn.flushall }
-      redirect_to collection_path, notice: "Queue cancelled (#{sidekiq_total} items)"
+      redirect_to collection_path, notice: "Queue cancelled (#{Product.queue_size} items)"
     end
 
     # => Destroy All
