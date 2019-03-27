@@ -33,7 +33,7 @@ job_type :rake,   %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment 
 job_type :runner, %q{ cd :path && PATH=:env_path:"$PATH" rails runner -e :environment ':task' :output }
 job_type :script, %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment bundle exec bin/:task :output }
 
-every 2.hours do # 1.minute 1.day 1.week 1.month 1.year is also supported
-  runner "Product.download_csv unless Product.queue_size > 0" # => Should be in the Activeadmin area but had to include here to ensure it worekd
-  runner "Product.sync_all"     # => Allows us to queue products in Sidekiq queue
+every :minute do # 1.minute 1.day 1.week 1.month 1.year is also supported
+  runner "Product.download_csv" # => Should be in the Activeadmin area but had to include here to ensure it worekd
+  runner "Product.sync_all unless Product.queue_size > 0"     # => Allows us to queue products in Sidekiq queue
 end
